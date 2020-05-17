@@ -1,11 +1,12 @@
 package pl.superjazda.drivingschool.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.List;
 
-public class TokenDTO {
+public class TokenDto {
     private String token;
     private String header = "Bearer";
     private Long id;
@@ -14,9 +15,10 @@ public class TokenDTO {
     private String name;
     private String surname;
     private List<String> roles;
+    @JsonIgnore
     private Collection<? extends GrantedAuthority> authorities;
 
-    public TokenDTO(String accessToken, Long id, String username, String email, String name, String surname, List<String> roles) {
+    public TokenDto(String accessToken, Long id, String username, String email, String name, String surname, List<String> roles) {
         this.token = accessToken;
         this.id = id;
         this.username = username;

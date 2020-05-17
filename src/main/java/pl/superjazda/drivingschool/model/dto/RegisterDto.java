@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-public class RegisterDTO {
+public class RegisterDto {
     @NotBlank
     @Size(min = 3, max = 30)
     private String username;
@@ -22,7 +22,7 @@ public class RegisterDTO {
     private String surname;
     private Set<String> roles;
 
-    public RegisterDTO() { }
+    public RegisterDto() { }
 
     public String getUsername() {
         return username;

@@ -1,54 +1,24 @@
 package pl.superjazda.drivingschool.model.dto;
 
-import pl.superjazda.drivingschool.model.Course;
-
 import java.util.Date;
 
-public class CourseDto {
-    private Long id;
+public class NewCourseDto {
     private String name;
     private String description;
     private float cost;
     private Date startDate;
     private String instructorUsername;
-    private String instructorName;
     private int members;
 
-    public CourseDto() { }
+    public NewCourseDto() { }
 
-    public CourseDto(Course course) {
-        this.id = course.getId();
-        this.name = course.getName();
-        this.description = course.getDescription();
-        this.cost = course.getCost();
-        this.startDate = course.getStartDate();
-        this.members = course.getMembers();
-        if (course.getInstructor() != null) {
-            this.instructorUsername = course.getInstructor().getUsername();
-            this.instructorName = course.getInstructor().getName() + " " + course.getInstructor().getSurname();
-        } else {
-            this.instructorName = "";
-            this.instructorUsername = "";
-        }
-    }
-
-    public CourseDto(Long id, String name, String description, float cost, Date startDate, String instructorUsername, String instructorName, int members) {
-        this.id = id;
+    public NewCourseDto(String name, String description, float cost, Date startDate, String instructorUsername, int members) {
         this.name = name;
         this.description = description;
         this.cost = cost;
         this.startDate = startDate;
         this.instructorUsername = instructorUsername;
-        this.instructorName = instructorName;
         this.members = members;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -89,14 +59,6 @@ public class CourseDto {
 
     public void setInstructorUsername(String instructorUsername) {
         this.instructorUsername = instructorUsername;
-    }
-
-    public String getInstructorName() {
-        return instructorName;
-    }
-
-    public void setInstructorName(String instructorName) {
-        this.instructorName = instructorName;
     }
 
     public int getMembers() {

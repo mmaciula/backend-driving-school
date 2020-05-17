@@ -1,5 +1,6 @@
 # Driving school
 ## Build project
+
 To be able to run the application you need to build it first. To build and package
 an app use the below command from the project folder which contains the `pom.xml`
 file.

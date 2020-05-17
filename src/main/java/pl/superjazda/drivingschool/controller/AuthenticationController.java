@@ -17,9 +17,9 @@ import pl.superjazda.drivingschool.model.ResponseMessage;
 import pl.superjazda.drivingschool.model.Role;
 import pl.superjazda.drivingschool.model.RoleType;
 import pl.superjazda.drivingschool.model.User;
-import pl.superjazda.drivingschool.model.dto.LoginDTO;
-import pl.superjazda.drivingschool.model.dto.RegisterDTO;
-import pl.superjazda.drivingschool.model.dto.TokenDTO;
+import pl.superjazda.drivingschool.model.dto.LoginDto;
+import pl.superjazda.drivingschool.model.dto.RegisterDto;
+import pl.superjazda.drivingschool.model.dto.TokenDto;
 import pl.superjazda.drivingschool.repository.RoleRepository;
 import pl.superjazda.drivingschool.repository.UserRepository;
 import pl.superjazda.drivingschool.security.JwtTokenUtil;
@@ -47,7 +47,7 @@ public class AuthenticationController {
     private JwtTokenUtil tokenUtil;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDTO logIn) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginDto logIn) {
         Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(logIn.getUsername(), logIn.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -58,7 +58,7 @@ public class AuthenticationController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new TokenDTO(jwtToken,
+        return ResponseEntity.ok(new TokenDto(jwtToken,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
@@ -68,7 +68,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterDTO register) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterDto register) {
         if (userRepository.existsByUsername(register.getUsername())) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Username already exists!"));
         }

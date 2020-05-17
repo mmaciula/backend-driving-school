@@ -1,9 +1,11 @@
 package pl.superjazda.drivingschool.model;
 
-import pl.superjazda.drivingschool.model.dto.CourseDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import pl.superjazda.drivingschool.model.dto.NewCourseDto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,15 +35,16 @@ public class Course {
     @DecimalMax("5000")
     private float cost;
     @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startDate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User instructor;
     @Column
     private int members;
 
     public Course() { }
 
-    public Course(CourseDto course, User instructor) {
+    public Course(NewCourseDto course, User instructor) {
        this.name = course.getName();
        this.description = course.getDescription();
        this.cost = course.getCost();

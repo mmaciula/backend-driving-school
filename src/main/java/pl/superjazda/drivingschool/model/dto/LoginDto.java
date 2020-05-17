@@ -2,13 +2,13 @@ package pl.superjazda.drivingschool.model.dto;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginDTO {
+public class LoginDto {
     @NotBlank
     private String username;
     @NotBlank
     private String password;
 
-    public LoginDTO() { }
+    public LoginDto() { }
 
     public String getUsername() {
         return username;
