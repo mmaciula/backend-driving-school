@@ -57,7 +57,7 @@ public class CourseController {
     }
 
     @GetMapping("/courses")
-    public ResponseEntity<List<CourseDto>> getAllAvailableCourses() {
+    public ResponseEntity<?> getAllAvailableCourses() {
         List<Course> courses = courseRepository.findAll();
         List<CourseDto> dtos = new ArrayList<>();
 
@@ -69,7 +69,7 @@ public class CourseController {
             }
         });
 
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/courses/{id}")

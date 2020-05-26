@@ -1,6 +1,5 @@
 package pl.superjazda.drivingschool.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import pl.superjazda.drivingschool.model.dto.NewCourseDto;
 
 import javax.persistence.Column;
@@ -35,7 +34,6 @@ public class Course {
     @DecimalMax("5000")
     private float cost;
     @Column
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date startDate;
     @ManyToOne(fetch = FetchType.LAZY)
     private User instructor;

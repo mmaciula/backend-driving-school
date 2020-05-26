@@ -15,6 +15,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,8 @@ public class User {
     private List<Course> courses = new ArrayList<>();
     @OneToMany(mappedBy = "instructor")
     private Set<Course> instructedCourses;
+    @OneToMany(mappedBy = "student")
+    private Collection<Activity> activities;
 
     public User () { }
 
@@ -128,5 +131,13 @@ public class User {
 
     public void setInstructedCourses(Set<Course> instructedCourses) {
         this.instructedCourses = instructedCourses;
+    }
+
+    public Collection<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Collection<Activity> activities) {
+        this.activities = activities;
     }
 }
