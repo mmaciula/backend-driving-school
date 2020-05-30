@@ -2,9 +2,7 @@ package pl.superjazda.drivingschool.user;
 
 import pl.superjazda.drivingschool.course.CourseDto;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class UserDto {
@@ -13,7 +11,7 @@ public class UserDto {
     private String name;
     private String surname;
     private Set<String> roles;
-    private List<CourseDto> courses;
+    private Set<CourseDto> courses;
 
     public UserDto() { }
 
@@ -27,7 +25,7 @@ public class UserDto {
             userRoles.add(role.getRoleType().name());
         });
         this.roles = userRoles;
-        List<CourseDto> userCourses = new ArrayList<>();
+        Set<CourseDto> userCourses = new HashSet<>();
         user.getCourses().forEach(course -> {
             userCourses.add(new CourseDto(course));
         });
@@ -74,11 +72,11 @@ public class UserDto {
         this.roles = roles;
     }
 
-    public List<CourseDto> getCourses() {
+    public Set<CourseDto> getCourses() {
         return courses;
     }
 
-    public void setCourses(List<CourseDto> courses) {
+    public void setCourses(Set<CourseDto> courses) {
         this.courses = courses;
     }
 }

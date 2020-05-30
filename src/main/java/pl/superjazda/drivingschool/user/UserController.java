@@ -82,7 +82,7 @@ public class UserController {
             throw new CourseNotFoundException("Course not found");
         }
 
-        List<Course> userCourses = user.get().getCourses();
+        Set<Course> userCourses = user.get().getCourses();
         userCourses.add(course.get());
         user.get().setCourses(userCourses);
 

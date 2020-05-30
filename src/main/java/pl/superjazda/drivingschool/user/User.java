@@ -18,9 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,7 +46,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_courses", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private List<Course> courses = new ArrayList<>();
+    private Set<Course> courses = new HashSet<>();
     @OneToMany(mappedBy = "instructor")
     private Set<Course> instructedCourses;
     @OneToMany(mappedBy = "student")
@@ -120,11 +118,11 @@ public class User {
         this.roles = roles;
     }
 
-    public List<Course> getCourses() {
+    public Set<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(List<Course> courses) {
+    public void setCourses(Set<Course> courses) {
         this.courses = courses;
     }
 
