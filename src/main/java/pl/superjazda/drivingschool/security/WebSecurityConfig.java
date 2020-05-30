@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pl.superjazda.drivingschool.jwt.AuthTokenFilter;
+import pl.superjazda.drivingschool.jwt.JwtAuthenticationEntryPoint;
+import pl.superjazda.drivingschool.jwt.JwtUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -55,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/users/**").permitAll()
                 .antMatchers("/api/activity/**").permitAll()
                 .antMatchers("/api/exam/**").permitAll()
+                .antMatchers("/api/contact/**").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

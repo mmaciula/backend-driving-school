@@ -3,8 +3,9 @@ package pl.superjazda.drivingschool.security
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import pl.superjazda.drivingschool.exception.UserNotFoundException
-import pl.superjazda.drivingschool.model.User
-import pl.superjazda.drivingschool.repository.UserRepository
+import pl.superjazda.drivingschool.jwt.JwtUserDetailsService
+import pl.superjazda.drivingschool.user.User
+import pl.superjazda.drivingschool.user.UserRepository
 import spock.lang.Specification
 
 @DataJpaTest

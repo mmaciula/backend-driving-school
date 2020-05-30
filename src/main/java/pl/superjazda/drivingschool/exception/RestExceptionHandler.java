@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ UserNotFoundException.class, CourseNotFoundException.class, RoleNotFoundException.class, NoSuchElementException.class,
-            ExamNotFoundException.class})
+            ExamNotFoundException.class, PracticalNotFoundException.class })
     protected ResponseEntity<Object> handleNotFound(Exception exception, WebRequest request) {
         return handleExceptionInternal(exception, exception.getLocalizedMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }

@@ -2,6 +2,8 @@ package pl.superjazda.drivingschool.security
 
 
 import org.springframework.test.util.ReflectionTestUtils
+import pl.superjazda.drivingschool.jwt.JwtTokenUtil
+import pl.superjazda.drivingschool.jwt.JwtUserDetails
 import spock.lang.Shared
 import spock.lang.Specification
 

@@ -1,5 +1,6 @@
 package pl.superjazda.drivingschool.model
 
+import pl.superjazda.drivingschool.user.User
 import spock.lang.Shared
 import spock.lang.Specification
 
