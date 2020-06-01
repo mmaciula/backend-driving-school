@@ -2,15 +2,22 @@ package pl.superjazda.drivingschool.exam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.superjazda.drivingschool.course.Course;
+import pl.superjazda.drivingschool.course.CourseRepository;
+import pl.superjazda.drivingschool.exception.CourseNotFoundException;
 import pl.superjazda.drivingschool.exception.ExamNotFoundException;
 import pl.superjazda.drivingschool.exception.UserNotFoundException;
+import pl.superjazda.drivingschool.helpers.ResponseMessage;
 import pl.superjazda.drivingschool.user.User;
 import pl.superjazda.drivingschool.user.UserRepository;
 
@@ -24,11 +31,33 @@ import java.util.Optional;
 public class ExamController {
     private ExamRepository examRepository;
     private UserRepository userRepository;
+    private CourseRepository courseRepository;
 
     @Autowired
-    public ExamController(ExamRepository examRepository, UserRepository userRepository) {
+    public ExamController(ExamRepository examRepository, UserRepository userRepository, CourseRepository courseRepository) {
         this.examRepository = examRepository;
         this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
+    }
+
+    @PostMapping("/add/{courseId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> addExam(@PathVariable Long courseId, @RequestBody AddExam addExam) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> user = userRepository.findByUsername(username);
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (!course.isPresent()) {
+            throw new CourseNotFoundException("Course not found");
+        }
+
+        Exam newExam = new Exam(addExam.getDate(), user.get(), course.get());
+        examRepository.save(newExam);
+
+        return ResponseEntity.ok(new ResponseMessage("Exam created successfully!"));
     }
 
     @GetMapping("/list")
@@ -55,8 +84,11 @@ public class ExamController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/student/{username}")
-    public ResponseEntity<?> findAllByStudentUsername(@PathVariable String username) {
+    @GetMapping("/student")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> findAllByStudentUsername() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         List<Exam> exams = examRepository.findAllByStudentUsername(username);
         List<ExamDto> dtos = new ArrayList<>();
 

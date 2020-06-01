@@ -43,6 +43,15 @@ public class Exam {
         this.occupied = false;
     }
 
+    public Exam(Date date, User student, Course course) {
+        this.examDate = date;
+        this.student = student;
+        this.instructor = course.getInstructor();
+        this.course = course;
+        this.occupied = true;
+        this.passed = false;
+    }
+
     public Long getId() {
         return id;
     }
