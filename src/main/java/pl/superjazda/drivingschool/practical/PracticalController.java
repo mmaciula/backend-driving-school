@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.superjazda.drivingschool.course.Course;
+import pl.superjazda.drivingschool.course.CourseRepository;
+import pl.superjazda.drivingschool.exception.CourseNotFoundException;
 import pl.superjazda.drivingschool.exception.PracticalNotFoundException;
 import pl.superjazda.drivingschool.exception.UserNotFoundException;
+import pl.superjazda.drivingschool.helpers.ResponseMessage;
 import pl.superjazda.drivingschool.user.User;
 import pl.superjazda.drivingschool.user.UserRepository;
 
@@ -27,11 +31,32 @@ import java.util.Optional;
 public class PracticalController {
     private PracticalRepository practicalRepository;
     private UserRepository userRepository;
+    private CourseRepository courseRepository;
 
     @Autowired
-    public PracticalController(PracticalRepository practicalRepository, UserRepository userRepository) {
+    public PracticalController(PracticalRepository practicalRepository, UserRepository userRepository, CourseRepository courseRepository) {
         this.practicalRepository = practicalRepository;
         this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
+    }
+
+    @PostMapping("/add/{courseId}")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public ResponseEntity<?> createPractical(@RequestBody AddPractical addPractical, @PathVariable Long courseId) {
+        String instructorUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> instructor = userRepository.findByUsername(instructorUsername);
+        if (!instructor.isPresent()) {
+            throw new UserNotFoundException("Instructor not found");
+        }
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (!course.isPresent()) {
+            throw new CourseNotFoundException("Course not found");
+        }
+
+        Practical practical = new Practical(addPractical.getDate(), course.get(), instructor.get());
+        practicalRepository.save(practical);
+
+        return ResponseEntity.ok(new ResponseMessage("Practical created successfully!"));
     }
 
     @PostMapping("/course/{practicalId}/signup")

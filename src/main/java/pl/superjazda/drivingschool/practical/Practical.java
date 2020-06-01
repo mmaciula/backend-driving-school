@@ -33,6 +33,12 @@ public class Practical {
 
     public Practical() { }
 
+    public Practical(Date date, Course course, User instructor) {
+        this.date = date;
+        this.course = course;
+        this.instructor = instructor;
+    }
+
     public Long getId() {
         return id;
     }
