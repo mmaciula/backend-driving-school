@@ -60,6 +60,7 @@ public class PracticalController {
     }
 
     @PostMapping("/course/{practicalId}/signup")
+    @PreAuthorize("hasRole('User')")
     public ResponseEntity<?> signUserForPractical(@PathVariable Long practicalId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
@@ -77,9 +78,11 @@ public class PracticalController {
         return ResponseEntity.ok(new PracticalDto(practical.get()));
     }
 
-    @GetMapping("/course/{courseId}/student")
-    public ResponseEntity<?> findAllCoursePracticalWithSignInUser(@PathVariable Long courseId) {
-        List<Practical> activities = practicalRepository.findAllByCourseIdAndStudentNotNull(courseId);
+    @GetMapping("/occupied")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public ResponseEntity<?> findAllCoursePracticalWithSignInUser() {
+        String instructorUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<Practical> activities = practicalRepository.findAllByInstructorUsernameAndStudentNotNull(instructorUsername);
         List<PracticalDto> dtos = new ArrayList<>();
 
         activities.forEach(practical -> {
@@ -101,10 +104,11 @@ public class PracticalController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/course/{courseId}/mine")
-    public ResponseEntity<?> findAllStudentsPracticals(@PathVariable Long courseId) {
+    @GetMapping("/mine")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> findAllStudentsPracticals() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<Practical> activities = practicalRepository.findAllByCourseIdAndStudentUsername(courseId, username);
+        List<Practical> activities = practicalRepository.findAllByStudentUsername(username);
         List<PracticalDto> dtos = new ArrayList<>();
 
         activities.forEach(practical -> {
