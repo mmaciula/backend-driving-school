@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.superjazda.drivingschool.helpers.ResponseMessage;
 
 @RestController
-@RequestMapping("/contact")
+@RequestMapping("/api/contact")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class ContactFormController {
-    /*private EmailService emailService;
+    private EmailService emailService;
 
     @Autowired
     public ContactFormController(EmailService emailService) {
@@ -23,6 +23,6 @@ public class ContactFormController {
     @PostMapping
     public ResponseEntity<?> sendMessage(@RequestBody ContactDto message) {
         emailService.contactForm(message);
-        return ResponseEntity.ok(new ResponseMessage("Your message has been sent"));
-    }*/
+        return ResponseEntity.ok(new ResponseMessage("Message sent"));
+    }
 }

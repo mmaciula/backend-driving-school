@@ -1,11 +1,14 @@
 package pl.superjazda.drivingschool.course;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class AddCourse {
     private String name;
     private String description;
     private float cost;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date startDate;
     private String instructorUsername;
     private int members;

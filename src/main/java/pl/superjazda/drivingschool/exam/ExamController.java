@@ -99,9 +99,12 @@ public class ExamController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/instructor/{username}")
-    public ResponseEntity<?> findAllByInstructorUsername(@PathVariable String username) {
-        List<Exam> exams = examRepository.findAllByInstructorUsername(username);
+    @GetMapping("/instructor")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public ResponseEntity<?> findAllByInstructorUsername() {
+        String instructorUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        List<Exam> exams = examRepository.findAllByInstructorUsernameOrderByExamDate(instructorUsername);
         List<ExamDto> dtos = new ArrayList<>();
 
         exams.forEach(exam -> {

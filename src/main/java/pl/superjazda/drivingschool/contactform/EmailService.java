@@ -1,17 +1,18 @@
 package pl.superjazda.drivingschool.contactform;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-    /*private JavaMailSender javaMailSender;
+    private JavaMailSender javaMailSender;
+    @Value("${spring.mail.username}")
     private String email;
 
-    public EmailService(JavaMailSender javaMailSender, String email) {
+    public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
-        this.email = email;
     }
 
     public void contactForm(ContactDto contact) {
@@ -31,5 +32,5 @@ public class EmailService {
         toSchool.setSubject("Wiadomość od: " + contact.getName());
         toSchool.setText(messageForSchool.toString());
         javaMailSender.send(toSchool);
-    }*/
+    }
 }

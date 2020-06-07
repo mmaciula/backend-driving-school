@@ -93,7 +93,7 @@ public class PracticalController {
     }
 
     @GetMapping("/course/{courseId}")
-    public ResponseEntity<?> findAllPractical(@PathVariable Long courseId) {
+    public ResponseEntity<?> findAllPracticalForCourse(@PathVariable Long courseId) {
         List<Practical> activities = practicalRepository.findAllByCourseId(courseId);
         List<PracticalDto> dtos = new ArrayList<>();
 
@@ -105,7 +105,7 @@ public class PracticalController {
     }
 
     @GetMapping("/mine")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> findAllStudentsPracticals() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         List<Practical> activities = practicalRepository.findAllByStudentUsername(username);
@@ -116,18 +116,6 @@ public class PracticalController {
         });
 
         return ResponseEntity.ok(dtos);
-    }
-
-    @GetMapping("/course/{id}/dates")
-    public ResponseEntity<?> findPracticalDatesByCourseId(@PathVariable Long id) {
-        List<Practical> activities = practicalRepository.findAllByCourseIdOrderByDate(id);
-        List<Date> activityDates = new ArrayList<>();
-
-        activities.forEach(practical -> {
-            activityDates.add(practical.getDate());
-        });
-
-        return ResponseEntity.ok(activityDates);
     }
 
     @PostMapping("/{id}/rate/{rate}")

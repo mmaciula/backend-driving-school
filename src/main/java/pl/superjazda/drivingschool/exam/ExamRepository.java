@@ -9,5 +9,5 @@ import java.util.List;
 public interface ExamRepository extends JpaRepository<Exam, Long> {
     List<Exam> findAllByCourseId(Long id);
     List<Exam> findAllByStudentUsername(String username);
-    List<Exam> findAllByInstructorUsername(String username);
+    List<Exam> findAllByInstructorUsernameOrderByExamDate(String username);
 }
