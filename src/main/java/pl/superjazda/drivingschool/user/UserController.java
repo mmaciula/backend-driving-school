@@ -70,6 +70,7 @@ public class UserController {
     }
 
     @PutMapping("/course/add/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> assignCourseToUser(@PathVariable Long id) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);

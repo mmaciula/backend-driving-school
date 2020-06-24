@@ -75,6 +75,7 @@ public class CourseController {
     }
 
     @GetMapping("/courses/{courseId}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> findCourseById(@PathVariable Long courseId) {
         Optional<Course> course = courseRepository.findById(courseId);
         if (!course.isPresent()) {
@@ -86,6 +87,7 @@ public class CourseController {
     }
 
     @GetMapping("/instructor")
+    @PreAuthorize("hasRole('MODERATOR')")
     public ResponseEntity<?> findAllInstructorCourses() {
         String instructorUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 

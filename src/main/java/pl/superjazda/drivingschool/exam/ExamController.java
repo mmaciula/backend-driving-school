@@ -41,7 +41,7 @@ public class ExamController {
     }
 
     @PostMapping("/add/{courseId}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> addExam(@PathVariable Long courseId, @RequestBody AddExam addExam) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
@@ -61,6 +61,7 @@ public class ExamController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> findAll() {
         List<Exam> exams = examRepository.findAll();
         List<ExamDto> dtos = new ArrayList<>();
@@ -73,6 +74,7 @@ public class ExamController {
     }
 
     @GetMapping("/course/{courseId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> findAllExamsByCourseId(@PathVariable Long courseId) {
         List<Exam> exams = examRepository.findAllByCourseId(courseId);
         List<ExamDto> dtos = new ArrayList<>();
@@ -115,6 +117,7 @@ public class ExamController {
     }
 
     @PutMapping("/signin/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> signInForExam(@PathVariable Long id) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
