@@ -18,7 +18,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, exception.getLocalizedMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler({ CourseHavePracticalException.class })
+    @ExceptionHandler({ CourseHavePracticalException.class, CourseAlreadyExistsException.class })
     protected ResponseEntity<Object> handleConflict(Exception exception, WebRequest request) {
         return handleExceptionInternal(exception, exception.getLocalizedMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
