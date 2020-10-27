@@ -75,7 +75,7 @@ public class UserService {
             throw new CourseNotFoundException("Course not found");
         }
         int participants = courseToUpdateParticipants.get().getMembers();
-        participants = participants -1;
+        participants = participants - 1;
         courseToUpdateParticipants.get().setMembers(participants);
         courseRepository.save(courseToUpdateParticipants.get());
 
