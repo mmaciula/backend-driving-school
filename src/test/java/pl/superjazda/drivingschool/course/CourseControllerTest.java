@@ -43,7 +43,9 @@ public class CourseControllerTest {
         User instructor = new User("instructor", "instructor@domain.com", "pass123", "Joe", "Doe");
         userRepository.save(instructor);
         Course course = new Course("Course", "Some course description", 1200, new Date(), 12, instructor);
+        Course test = new Course("Test", "Test course to delete", 2300, new Date(), 18, instructor);
         courseRepository.save(course);
+        courseRepository.save(test);
     }
 
     @Test
@@ -84,17 +86,21 @@ public class CourseControllerTest {
     @Test
     @WithMockUser
     public void shouldNotFindCourseByIdTest() throws Exception {
-        mockMvc.perform(get("/api/course/courses/{courseId}", 1L))
+        Long defaultCourseId = 1L;
+
+        mockMvc.perform(get("/api/course/courses/{courseId}", defaultCourseId))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldDeleteChosenCourseTest() throws Exception {
-        mockMvc.perform(delete("/api/course/delete/{id}", 1000001L))
+        Long courseId = 1000002L;
+
+        mockMvc.perform(delete("/api/course/delete/{id}", courseId))
                 .andExpect(status().isOk());
 
-        Optional<Course> course = courseRepository.findById(1000001L);
-        assertFalse(course.isPresent());
+        Optional<Course> findCourseInDB = courseRepository.findById(courseId);
+        assertFalse(findCourseInDB.isPresent());
     }
 }
