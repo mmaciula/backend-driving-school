@@ -40,34 +40,39 @@ public class PracticalControllerTest {
     private UserRepository userRepository;
     @Autowired
     private PracticalRepository practicalRepository;
+    private static boolean initTest = false;
 
     @Before
     public void setUp() {
-        User instructor = new User("instructor", "instructor@domain.com", "password", "Joe", "Doe");
-        User student = new User("student", "student@domain.com", "test123", "John", "Smith");
-        userRepository.save(instructor);
-        userRepository.save(student);
-        Course course = new Course("Name", "Description", 1200, new Date(), 8, instructor);
-        courseRepository.save(course);
-        Practical practical = new Practical(new Date(), course, instructor);
-        practicalRepository.save(practical);
+        if (!initTest) {
+            User instructor = new User("instructor", "instructor@domain.com", "password", "Joe", "Doe");
+            userRepository.save(instructor);
+            User student = new User("student", "student@domain.com", "test123", "John", "Smith");
+            userRepository.save(student);
+            Course course = new Course("Name", "Description", 1200, new Date(), 8, instructor);
+            courseRepository.save(course);
+            Practical practical = new Practical(new Date(), course, instructor);
+            practicalRepository.save(practical);
+
+            initTest = true;
+        }
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN", username = "instructor")
-    public void shouldAddNewCourseTest() throws Exception {
+    @WithMockUser(roles = "MODERATOR", username = "instructor")
+    public void shouldAddNewCoursePracticalTest() throws Exception {
+        Long courseId = 1000001L;
         AddPractical addPractical = new AddPractical(new Date());
 
-        mockMvc.perform(post("/api/activity/add/{courseId}", 1000001L)
+        mockMvc.perform(post("/api/activity/add/{courseId}", courseId)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(addPractical)))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        List<Practical> practicals = practicalRepository.findAllByCourseId(1000001L);
+        List<Practical> practicals = practicalRepository.findAllByCourseId(courseId);
 
         assertTrue(practicals.size() == 2);
-        assertTrue(practicals.get(0).getCourse().getId() == 1000001L);
     }
 
     @Test

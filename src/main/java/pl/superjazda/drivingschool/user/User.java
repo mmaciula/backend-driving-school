@@ -4,6 +4,7 @@ import pl.superjazda.drivingschool.course.Course;
 import pl.superjazda.drivingschool.practical.Practical;
 import pl.superjazda.drivingschool.role.Role;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,6 +31,7 @@ public class User {
     private Long id;
     @NotBlank
     @Size(min = 3, message = "Username must be at least 3 characters", max = 60)
+    @Column(unique = true)
     private String username;
     @NotBlank
     @Email(message = "Invalid email")
