@@ -37,13 +37,20 @@ public class CourseControllerTest {
     private UserRepository userRepository;
     @Autowired
     private CourseRepository courseRepository;
+    private static boolean initTest = false;
 
     @Before
     public void setUp() {
-        User instructor = new User("instructor", "instructor@domain.com", "pass123", "Joe", "Doe");
-        userRepository.save(instructor);
-        Course course = new Course("Course", "Some course description", 1200, new Date(), 12, instructor);
-        courseRepository.save(course);
+        if (!initTest) {
+            User instructor = new User("instructor", "instructor@domain.com", "pass123", "Joe", "Doe");
+            userRepository.save(instructor);
+            Course course = new Course("Course", "Some course description", 1200, new Date(), 12, instructor);
+            courseRepository.save(course);
+            Course courseToDelete = new Course("Course to delete", "Course to delete description", 2200, new Date(), 24, instructor);
+            courseRepository.save(courseToDelete);
+
+            initTest = true;
+        }
     }
 
     @Test
@@ -91,10 +98,12 @@ public class CourseControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldDeleteChosenCourseTest() throws Exception {
-        mockMvc.perform(delete("/api/course/delete/{id}", 1000001L))
+        Long courseId = 1000002L;
+
+        mockMvc.perform(delete("/api/course/delete/{id}", courseId))
                 .andExpect(status().isOk());
 
-        Optional<Course> course = courseRepository.findById(1000001L);
+        Optional<Course> course = courseRepository.findById(courseId);
         assertFalse(course.isPresent());
     }
 }

@@ -39,15 +39,20 @@ public class ExamControllerTest {
     private UserRepository userRepository;
     @Autowired
     private ExamRepository examRepository;
+    private static boolean initTest = false;
 
     @Before
     public void setUp() {
-        User instructor = new User("instructor", "instructor@domain.com", "test123", "Joe", "Doe");
-        userRepository.save(instructor);
-        Course course = new Course("Course name", "Course description", 2500, new Date(), 18, instructor);
-        courseRepository.save(course);
-        Exam exam = new Exam(new Date(), course, instructor);
-        examRepository.save(exam);
+        if (!initTest) {
+            User instructor = new User("instructor", "instructor@domain.com", "test123", "Joe", "Doe");
+            userRepository.save(instructor);
+            Course course = new Course("Course name", "Course description", 2500, new Date(), 18, instructor);
+            courseRepository.save(course);
+            Exam exam = new Exam(new Date(), course, instructor);
+            examRepository.save(exam);
+
+            initTest = true;
+        }
     }
 
     @Test
@@ -80,12 +85,6 @@ public class ExamControllerTest {
     @Test
     @WithMockUser(username = "student")
     public void shouldFindAllStudentExamsTest() throws Exception {
-        User user = new User("student", "stud@domain.com", "password", "John", "Mock");
-        userRepository.save(user);
-        Optional<Exam> exam = examRepository.findById(3000001L);
-        exam.get().setStudent(user);
-        examRepository.save(exam.get());
-
         mockMvc.perform(get("/api/exam/student"))
                 .andDo(print())
                 .andExpect(status().isOk())
