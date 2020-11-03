@@ -1,7 +1,6 @@
 package pl.superjazda.drivingschool.course;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.superjazda.drivingschool.user.User;
 import pl.superjazda.drivingschool.user.UserRepository;
 
 import java.util.Date;
@@ -37,21 +35,6 @@ public class CourseControllerTest {
     private UserRepository userRepository;
     @Autowired
     private CourseRepository courseRepository;
-    private static boolean initTest = false;
-
-    @Before
-    public void setUp() {
-        if (!initTest) {
-            User instructor = new User("instructor", "instructor@domain.com", "pass123", "Joe", "Doe");
-            userRepository.save(instructor);
-            Course course = new Course("Course", "Some course description", 1200, new Date(), 12, instructor);
-            courseRepository.save(course);
-            Course courseToDelete = new Course("Course to delete", "Course to delete description", 2200, new Date(), 24, instructor);
-            courseRepository.save(courseToDelete);
-
-            initTest = true;
-        }
-    }
 
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -69,7 +52,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "joe")
+    @WithMockUser
     public void shouldGetListOfAllAvailableCoursesForCurrentlyLoggedUserTest() throws Exception {
         // TODO Look at TODO inside ExamControllerTest class
         mockMvc.perform(get("/api/course/courses"))
@@ -100,7 +83,7 @@ public class CourseControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldDeleteChosenCourseTest() throws Exception {
-        Long courseId = 1000002L;
+        Long courseId = 1000003L;
 
         mockMvc.perform(delete("/api/course/delete/{id}", courseId))
                 .andExpect(status().isOk());

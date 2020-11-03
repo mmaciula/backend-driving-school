@@ -1,4 +1,4 @@
-package pl.superjazda.drivingschool.security
+package pl.superjazda.drivingschool.jwt
 
 
 import org.springframework.test.util.ReflectionTestUtils

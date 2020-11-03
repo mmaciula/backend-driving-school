@@ -1,7 +1,6 @@
 package pl.superjazda.drivingschool.exam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.superjazda.drivingschool.course.Course;
 import pl.superjazda.drivingschool.course.CourseRepository;
 import pl.superjazda.drivingschool.user.User;
 import pl.superjazda.drivingschool.user.UserRepository;
 
-import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
@@ -39,21 +36,6 @@ public class ExamControllerTest {
     private UserRepository userRepository;
     @Autowired
     private ExamRepository examRepository;
-    private static boolean initTest = false;
-
-    @Before
-    public void setUp() {
-        if (!initTest) {
-            User instructor = new User("instructor", "instructor@domain.com", "test123", "Joe", "Doe");
-            userRepository.save(instructor);
-            Course course = new Course("Course name", "Course description", 2500, new Date(), 18, instructor);
-            courseRepository.save(course);
-            Exam exam = new Exam(new Date(), course, instructor);
-            examRepository.save(exam);
-
-            initTest = true;
-        }
-    }
 
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -74,7 +56,7 @@ public class ExamControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldFindAllCourseExamsByIdTest() throws Exception{
-        Long courseId = 1000001L;
+        Long courseId = 1000002L;
 
         mockMvc.perform(get("/api/exam/course/{courseId}", courseId))
                 .andDo(print())
@@ -83,25 +65,22 @@ public class ExamControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "student")
+    @WithMockUser(username = "studWithExams")
     public void shouldFindAllStudentExamsTest() throws Exception {
         mockMvc.perform(get("/api/exam/student"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].studentUsername").value("student"));
+                .andExpect(jsonPath("$[0].studentUsername").value("studWithExams"));
     }
 
     @Test
     @WithMockUser(username = "student")
     public void shouldSignUpForAnExam() throws Exception {
-        User user = new User("student", "stud@domain.com", "password", "John", "Smith");
-        userRepository.save(user);
-
-        mockMvc.perform(put("/api/exam/signin/{id}", 3000001))
+        mockMvc.perform(put("/api/exam/signin/{id}", 3000002L))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        Optional<Exam> examFromDB = examRepository.findById(3000001L);
+        Optional<Exam> examFromDB = examRepository.findById(3000002L);
         assertTrue(examFromDB.get().getOccupied());
     }
 }

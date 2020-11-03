@@ -1,7 +1,6 @@
 package pl.superjazda.drivingschool.practical;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.superjazda.drivingschool.course.Course;
 import pl.superjazda.drivingschool.course.CourseRepository;
 import pl.superjazda.drivingschool.user.User;
 import pl.superjazda.drivingschool.user.UserRepository;
@@ -40,28 +38,11 @@ public class PracticalControllerTest {
     private UserRepository userRepository;
     @Autowired
     private PracticalRepository practicalRepository;
-    private static boolean initTest = false;
-
-    @Before
-    public void setUp() {
-        if (!initTest) {
-            User instructor = new User("instructor", "instructor@domain.com", "password", "Joe", "Doe");
-            userRepository.save(instructor);
-            User student = new User("student", "student@domain.com", "test123", "John", "Smith");
-            userRepository.save(student);
-            Course course = new Course("Name", "Description", 1200, new Date(), 8, instructor);
-            courseRepository.save(course);
-            Practical practical = new Practical(new Date(), course, instructor);
-            practicalRepository.save(practical);
-
-            initTest = true;
-        }
-    }
 
     @Test
     @WithMockUser(roles = "MODERATOR", username = "instructor")
     public void shouldAddNewCoursePracticalTest() throws Exception {
-        Long courseId = 1000001L;
+        Long courseId = 1000002L;
         AddPractical addPractical = new AddPractical(new Date());
 
         mockMvc.perform(post("/api/activity/add/{courseId}", courseId)
@@ -72,17 +53,19 @@ public class PracticalControllerTest {
 
         List<Practical> practicals = practicalRepository.findAllByCourseId(courseId);
 
-        assertTrue(practicals.size() == 2);
+        assertTrue(practicals.size() == 3);
     }
 
     @Test
     @WithMockUser(username = "student")
     public void shouldSignUserForPracticalTest() throws Exception {
-        mockMvc.perform(post("/api/activity/course/{practicalId}/signup", 2000001L))
+        Long practicalInDBId = 2000002L;
+
+        mockMvc.perform(post("/api/activity/course/{practicalId}/signup", practicalInDBId))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        Optional<Practical> practicalBooked = practicalRepository.findById(2000001L);
+        Optional<Practical> practicalBooked = practicalRepository.findById(practicalInDBId);
 
         assertTrue(practicalBooked.get().getStudent() != null);
         assertTrue(practicalBooked.get().getStudent().getUsername().equals("student"));
@@ -91,7 +74,7 @@ public class PracticalControllerTest {
     @Test
     @WithMockUser(roles = "MODERATOR", username = "instructor")
     public void shouldFindAllCoursePracticalsWithSignUserTest() throws Exception {
-        Optional<Practical> practical = practicalRepository.findById(2000001L);
+        Optional<Practical> practical = practicalRepository.findById(2000002L);
         Optional<User> student = userRepository.findByUsername("student");
         practical.get().setStudent(student.get());
         practicalRepository.save(practical.get());
@@ -105,7 +88,7 @@ public class PracticalControllerTest {
     @Test
     @WithMockUser
     public void shouldFindAllCoursePracticalsTest() throws Exception {
-        Long courseId = 1000001L;
+        Long courseId = 1000002L;
 
         mockMvc.perform(get("/api/activity/course/{courseId}", courseId))
                 .andDo(print())
@@ -116,7 +99,7 @@ public class PracticalControllerTest {
     @Test
     @WithMockUser(username = "student")
     public void shouldFindAllStudentPracticals() throws Exception {
-        Long practicalId = 2000001L;
+        Long practicalId = 2000002L;
         Optional<User> student = userRepository.findByUsername("student");
         Optional<Practical> practical = practicalRepository.findById(practicalId);
         practical.get().setStudent(student.get());
@@ -131,7 +114,7 @@ public class PracticalControllerTest {
     @Test
     @WithMockUser(roles = "MODERATOR")
     public void shouldRatePracticalTest() throws Exception {
-        Long practicalId = 2000001L;
+        Long practicalId = 2000002L;
         int rate = 4;
 
         mockMvc.perform(post("/api/activity/{id}/rate/{rate}", practicalId, rate))
@@ -146,7 +129,7 @@ public class PracticalControllerTest {
     @Test
     @WithMockUser(roles = "MODERATOR")
     public void shouldAddCommentToPracticalTest() throws Exception {
-        Long practicalId = 2000001L;
+        Long practicalId = 2000002L;
         String comment = "Instructor comment about the practical";
 
         mockMvc.perform(post("/api/activity/{id}/comment", practicalId)

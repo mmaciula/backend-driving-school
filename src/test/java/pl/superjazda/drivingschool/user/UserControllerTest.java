@@ -37,25 +37,11 @@ public class UserControllerTest {
     private CourseRepository courseRepository;
     @Autowired
     private RoleRepository roleRepository;
-    private static boolean initTest = false;
-
-    @Before
-    public void setUp() {
-        if (!initTest) {
-            User user = new User("student", "stud@domain.com", "stud123", "Joe", "Doe");
-            User admin = new User("administrator", "admin@domain.com", "admin123", "John", "Smith");
-            userRepository.save(user);
-            userRepository.save(admin);
-
-            initTest = true;
-        }
-    }
 
     @Test
     @WithMockUser(username = "administrator", roles = "ADMIN")
     public void shouldFindAllRegisteredUsersTest() throws Exception {
-        Optional<User> user = userRepository.findByUsername("student");
-
+        // TODO Check return array
         mockMvc.perform(get("/api/users"))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -64,18 +50,12 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "student")
     public void shouldAssignUserToCourseTest() throws Exception {
-        User instructor = new User("instructor", "instructor@domain.com", "instructor123", "Steven", "Instructor");
-        userRepository.save(instructor);
-        Course course = new Course("Course name", "Course description", 500, new Date(), 10, instructor);
-        courseRepository.save(course);
+        Optional<Course> course = courseRepository.findById(1000002L);
 
-        Course courseFromDB = courseRepository.findByName(course.getName());
-        Long courseId = courseFromDB.getId();
-
-        mockMvc.perform(put("/api/users/course/add/{id}", courseId))
+        mockMvc.perform(put("/api/users/course/add/{id}", course.get().getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.courses[0].id").value(courseId));
+                .andExpect(jsonPath("$.courses[0].id").value(course.get().getId()));
     }
 
     @Test
