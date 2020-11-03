@@ -1,4 +1,4 @@
-package pl.superjazda.drivingschool.security
+package pl.superjazda.drivingschool.jwt
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -12,33 +12,28 @@ import spock.lang.Specification
 class JwtUserDetailsServiceTest extends Specification {
     @Autowired
     private UserRepository userRepository;
-    private User testUser = new User("joedoe", "joe@domain.com", "secret_password", "Joe", "Doe")
 
     def "should find user by username in repository"() {
-        def savedUser = userRepository.save(testUser)
-
-        when: "load user entity by 'joedoe' username"
-            def foundUser = userRepository.findByUsername("joedoe")
+        when: "load user entity by 'student' username"
+            def foundUser = userRepository.findByUsername("student")
 
         then: "loaded entity is correct"
-            foundUser.get().username == "joedoe"
+            foundUser.get().username == "student"
     }
 
     def "should load user by username"() {
         given:
-            userRepository.save(testUser)
             def service = new JwtUserDetailsService(userRepository)
 
         when:
-            def foundUser = service.loadUserByUsername("joedoe")
+            def foundUser = service.loadUserByUsername("student")
 
         then:
-            foundUser.username == "joedoe"
+            foundUser.username == "student"
     }
 
     def "should throw UsernameNotFoundException when try to load non-existing user"() {
         given:
-            userRepository.save(testUser)
             def service = new JwtUserDetailsService(userRepository)
 
         when:

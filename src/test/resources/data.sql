@@ -1,0 +1,10 @@
+insert into users (id, username, email, password, name, surname) values (12, 'instructor', 'instructor@domain.com', 'pass123', 'Instru', 'Ctor');
+insert into courses (id, name, description, cost, start_date, members, instructor_id) values (1000002, 'Course', 'Some course description', 1200, '2020-10-05', 12, 12);
+insert into courses (id, name, description, cost, start_date, members, instructor_id) values (1000003, 'Course to delete', 'Course to delete description', 2200, '2020-11-20', 24, 12);
+insert into exams (id, exam_date, instructor_id, course_id, occupied, passed) values (3000002, '2020-12-12', 12, 1000002, false, false);
+insert into users (id, username, email, password, name, surname) values (13, 'studWithExams', 'stud@domain.com', 'stud123', 'With', 'Exams');
+insert into exams (id, exam_date, instructor_id, course_id, student_id, occupied, passed) values (3000003, '2020-12-10', 12, 1000002, 13, false, false);
+insert into users (id, username, email, password, name, surname) values (14, 'student', 'student@domain.com', 'student123', 'Stud', 'Ent');
+insert into users (id, username, email, password, name, surname) values (15, 'administrator', 'administrator@domain.com', 'admin123', 'Admin', 'Istrator');
+insert into practicals (id, date, course_id, instructor_id, instructor_rate) values (2000002, '2020-12-06', 1000002, 12, 0);
+insert into practicals (id, date, course_id, instructor_id, instructor_rate) values (2000003, '2020-12-07', 1000002, 12, 0);
