@@ -46,7 +46,7 @@ public class UserService {
         List<UserDto> users = new ArrayList<>();
 
         userRepository.findAll().forEach(user -> {
-            if (user.getUsername() != getCurrentUser().getUsername()) {
+            if (!user.getUsername().equals(getCurrentUser().getUsername())) {
                 users.add(new UserDto(user));
             }
         });

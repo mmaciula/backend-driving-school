@@ -131,6 +131,26 @@
 			<properties>
 				<sonar.host.url>http://localhost:9000</sonar.host.url>
 				<sonar.tests>src/test/groovy,src/test/java</sonar.tests>
+				<sonar.exclusions>
+					**/AddCourse.java,
+					**/AddExam.java,
+					**/AddPractical.java,
+					**/Application.java,
+					**/ContactDto.java,
+					**/Course.java,
+					**/CourseDto.java,
+					**/Exam.java,
+					**/ExamDto.java,
+					**/exception/*.java,
+					**/helpers/*.java,
+					**/Practical.java,
+					**/PracticalDto.java,
+					**/Login.java,
+					**/Register.java,
+					**/TokenDto.java,
+					**/User.java,
+					**/UserDto.java
+				</sonar.exclusions>
 			</properties>
 		</profile>
 	</profiles>

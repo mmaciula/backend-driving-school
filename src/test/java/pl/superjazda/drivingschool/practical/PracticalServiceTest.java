@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import pl.superjazda.drivingschool.course.Course;
 import pl.superjazda.drivingschool.course.CourseRepository;
 import pl.superjazda.drivingschool.exception.CourseNotFoundException;
+import pl.superjazda.drivingschool.exception.PracticalNotFoundException;
 import pl.superjazda.drivingschool.exception.UserNotFoundException;
 import pl.superjazda.drivingschool.user.User;
 import pl.superjazda.drivingschool.user.UserRepository;
@@ -73,5 +74,34 @@ public class PracticalServiceTest {
         PracticalDto practicalDto = practicalService.signUserForPractical(1L);
 
         assertTrue((practicalDto.getStudent().getName()).equals(user.getName()));
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void shouldThrowUserNotFoundWhileTryingToSignUserToPracticalTest() {
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+
+        practicalService.signUserForPractical(1L);
+    }
+
+    @Test(expected = PracticalNotFoundException.class)
+    public void shouldThrowPracticalNotFoundWhileTryingToSignUserToPracticalTest() {
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(new User()));
+        when(practicalRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        practicalService.signUserForPractical(1L);
+    }
+
+    @Test(expected = PracticalNotFoundException.class)
+    public void shouldThrowPracticalNotFoundWhileRatingPracticalTest() {
+        when(practicalRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        practicalService.ratePractical(1L, 5);
+    }
+
+    @Test(expected = PracticalNotFoundException.class)
+    public void shouldThrowPracticalNotFoundWhileCommentingPracticalTest() {
+        when(practicalRepository.findById(1L)).thenReturn(Optional.empty());
+
+        practicalService.commentPractical(1L, "Comment about practical");
     }
 }
