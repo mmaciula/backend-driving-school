@@ -21,9 +21,13 @@ import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -50,22 +54,27 @@ public class PracticalServiceTest {
     public void shouldThrowInstructorMotFoundWhileTyringToCreateNewPracticalTest() {
         AddPractical addPractical = new AddPractical(new Date());
 
-        PracticalDto practical = practicalService.createNewPractical(addPractical, 1L);
+        practicalService.createNewPractical(addPractical, 1L);
+
+        verify(userRepository).findByUsername("username");
+        verifyNoInteractions(courseRepository);
+        verifyNoInteractions(practicalRepository);
     }
 
     @Test(expected = CourseNotFoundException.class)
     public void shouldThrowCourseNotFoundWhileCreatingNewPractical() {
-        AddPractical addPractical = new AddPractical(new Date());
-        User instructor = new User();
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(new User()));
 
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(instructor));
+        practicalService.createNewPractical(new AddPractical(new Date()), 1L);
 
-        PracticalDto practical = practicalService.createNewPractical(addPractical, 1L);
+        verify(userRepository).findByUsername("username");
+        verify(courseRepository).findById(1L);
+        verifyNoInteractions(practicalRepository);
     }
 
     @Test
     public void shouldSignUserToPractical() {
-        User user = new User("Username", "user@domain.com", "password", "Joe", "Doe");
+        User user = new User("username", "user@domain.com", "password", "Joe", "Doe");
         Practical practical = new Practical(new Date(), new Course(), new User());
 
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
@@ -74,6 +83,7 @@ public class PracticalServiceTest {
         PracticalDto practicalDto = practicalService.signUserForPractical(1L);
 
         assertTrue((practicalDto.getStudent().getName()).equals(user.getName()));
+        verify(practicalRepository).save(any());
     }
 
     @Test(expected = UserNotFoundException.class)
@@ -81,6 +91,9 @@ public class PracticalServiceTest {
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
         practicalService.signUserForPractical(1L);
+
+        verify(userRepository).findByUsername("username");
+        verifyNoInteractions(practicalRepository);
     }
 
     @Test(expected = PracticalNotFoundException.class)
@@ -89,6 +102,10 @@ public class PracticalServiceTest {
         when(practicalRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         practicalService.signUserForPractical(1L);
+
+        verify(userRepository).findByUsername("username");
+        verify(practicalRepository).findById(1L);
+        verifyNoMoreInteractions(practicalRepository);
     }
 
     @Test(expected = PracticalNotFoundException.class)
@@ -96,6 +113,9 @@ public class PracticalServiceTest {
         when(practicalRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         practicalService.ratePractical(1L, 5);
+
+        verify(practicalRepository).findById(1L);
+        verifyNoMoreInteractions(practicalRepository);
     }
 
     @Test(expected = PracticalNotFoundException.class)
@@ -103,5 +123,8 @@ public class PracticalServiceTest {
         when(practicalRepository.findById(1L)).thenReturn(Optional.empty());
 
         practicalService.commentPractical(1L, "Comment about practical");
+
+        verify(practicalRepository).findById(1L);
+        verifyNoMoreInteractions(practicalRepository);
     }
 }

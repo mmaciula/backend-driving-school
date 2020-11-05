@@ -20,6 +20,7 @@ public class PracticalService {
     private PracticalRepository practicalRepository;
     private UserRepository userRepository;
     private CourseRepository courseRepository;
+    private static final String PRACTICAL = "Practical not found";
 
     @Autowired
     public PracticalService(PracticalRepository practicalRepository, UserRepository userRepository, CourseRepository courseRepository) {
@@ -53,7 +54,7 @@ public class PracticalService {
         }
         Optional<Practical> practical = practicalRepository.findById(practicalId);
         if (!practical.isPresent()) {
-            throw new PracticalNotFoundException("Practical not found");
+            throw new PracticalNotFoundException(PRACTICAL);
         }
 
         practical.get().setStudent(user.get());
@@ -100,7 +101,7 @@ public class PracticalService {
     public PracticalDto ratePractical(Long id, int rate) {
         Optional<Practical> practical = practicalRepository.findById(id);
         if (!practical.isPresent()) {
-            throw new PracticalNotFoundException("Practical not found");
+            throw new PracticalNotFoundException(PRACTICAL);
         }
         practical.get().setInstructorRate(rate);
         practicalRepository.save(practical.get());
@@ -111,7 +112,7 @@ public class PracticalService {
     public PracticalDto commentPractical(Long id, String comment) {
         Optional<Practical> practical = practicalRepository.findById(id);
         if (!practical.isPresent()) {
-            throw new PracticalNotFoundException("Practical not found");
+            throw new PracticalNotFoundException(PRACTICAL);
         }
         practical.get().setComment(comment);
         practicalRepository.save(practical.get());
