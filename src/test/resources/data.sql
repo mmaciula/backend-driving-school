@@ -8,3 +8,4 @@ insert into users (id, username, email, password, name, surname) values (14, 'st
 insert into users (id, username, email, password, name, surname) values (15, 'administrator', 'administrator@domain.com', 'admin123', 'Admin', 'Istrator');
 insert into practicals (id, date, course_id, instructor_id, instructor_rate) values (2000002, '2020-12-06', 1000002, 12, 0);
 insert into practicals (id, date, course_id, instructor_id, instructor_rate) values (2000003, '2020-12-07', 1000002, 12, 0);
+insert into users (id, username, email, password, name, surname) values (16, 'delete', 'delete@domain.com', 'delete123', 'Student', 'Delete');
