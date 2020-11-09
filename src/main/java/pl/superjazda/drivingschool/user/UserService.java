@@ -71,6 +71,7 @@ public class UserService {
         userCourses.add(course.get());
         user.get().setCourses(userCourses);
 
+        // TODO Check if below is necessary
         Optional<Course> courseToUpdateParticipants = courseRepository.findById(courseId);
         if (!courseToUpdateParticipants.isPresent()) {
             throw new CourseNotFoundException(COURSE);

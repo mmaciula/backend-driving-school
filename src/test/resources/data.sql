@@ -9,3 +9,6 @@ insert into users (id, username, email, password, name, surname) values (15, 'ad
 insert into practicals (id, date, course_id, instructor_id, instructor_rate) values (2000002, '2020-12-06', 1000002, 12, 0);
 insert into practicals (id, date, course_id, instructor_id, instructor_rate) values (2000003, '2020-12-07', 1000002, 12, 0);
 insert into users (id, username, email, password, name, surname) values (16, 'delete', 'delete@domain.com', 'delete123', 'Student', 'Delete');
+insert into roles (id, name) values (1, 'ROLE_ADMIN');
+insert into roles (id, name) values (2, 'ROLE_MODERATOR');
+insert into roles (id, name) values (3, 'ROLE_USER');

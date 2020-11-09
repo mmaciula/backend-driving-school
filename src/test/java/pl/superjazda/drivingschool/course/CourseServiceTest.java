@@ -1,6 +1,5 @@
 package pl.superjazda.drivingschool.course;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,6 +101,17 @@ public class CourseServiceTest {
         assertTrue(instructorCourses.size() == 2);
         verify(courseRepository).findAllByInstructorUsername("username");
         verifyNoMoreInteractions(courseRepository);
+    }
+
+    @Test
+    public void shouldReturnEmptyArrayWhenInstructorDoesNotHaveCourses() {
+        mockSecurityContext();
+        when(courseRepository.findAllByInstructorUsername(anyString())).thenReturn(new ArrayList<>());
+
+        List<CourseDto> instructorCourses = courseService.findAllInstructorCourses();
+
+        assertTrue(instructorCourses.isEmpty());
+        verify(courseRepository).findAllByInstructorUsername("username");
     }
 
     @Test(expected = CourseNotFoundException.class)

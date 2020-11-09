@@ -152,6 +152,7 @@
 					**/exception/*.java,
 					**/helpers/*.java,
 					**/JwtAuthenticationEntryPoint.java,
+					**/JwtUserDetails.java,
 					**/Practical.java,
 					**/PracticalDto.java,
 					**/Role.java,

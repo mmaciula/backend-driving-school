@@ -71,8 +71,6 @@ public class UserControllerTest {
     public void shouldAssignNewRoleToUser() throws Exception {
         String username = "student";
         String role = "ROLE_ADMIN";
-        Role adminRole = new Role(RoleType.ROLE_ADMIN);
-        roleRepository.save(adminRole);
 
         mockMvc.perform(post("/api/users/roles/assign/{role}/{username}", role, username))
                 .andDo(print())

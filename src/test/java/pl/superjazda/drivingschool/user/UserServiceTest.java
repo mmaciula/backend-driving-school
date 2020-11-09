@@ -1,7 +1,9 @@
 package pl.superjazda.drivingschool.user;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -12,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import pl.superjazda.drivingschool.course.Course;
 import pl.superjazda.drivingschool.course.CourseRepository;
 import pl.superjazda.drivingschool.exception.CourseNotFoundException;
+import pl.superjazda.drivingschool.exception.RoleNotFoundException;
 import pl.superjazda.drivingschool.exception.UserNotFoundException;
 import pl.superjazda.drivingschool.role.Role;
 import pl.superjazda.drivingschool.role.RoleRepository;
@@ -41,6 +44,8 @@ public class UserServiceTest {
     private RoleRepository roleRepository;
     @InjectMocks
     private UserService userService;
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -84,8 +89,11 @@ public class UserServiceTest {
         assertFalse(userDto.getCourses().isEmpty());
     }
 
-    @Test(expected = UserNotFoundException.class)
+    @Test
     public void shouldThrowUserNotFoundWhileAssignUserToCourseTest() {
+        exceptionRule.expect(UserNotFoundException.class);
+        exceptionRule.expectMessage("User not found");
+
         userService.assignUserToCourse(1L);
 
         verify(userRepository).findByUsername("username");
@@ -93,9 +101,11 @@ public class UserServiceTest {
         verifyNoMoreInteractions(userRepository);
     }
 
-    @Test(expected = CourseNotFoundException.class)
+    @Test
     public void shouldThrowCourseNotFindWhileAssignUserToCourseTest() {
         when(userRepository.findByUsername(anyString())).thenReturn(initUser());
+        exceptionRule.expect(CourseNotFoundException.class);
+        exceptionRule.expectMessage("Course not found");
 
         userService.assignUserToCourse(1L);
 
@@ -115,6 +125,31 @@ public class UserServiceTest {
         UserDto userWithUpdatedRoles = userService.assignRoleToUser("ROLE_ADMIN", "student");
 
         assertTrue(userWithUpdatedRoles.getRoles().contains("ROLE_ADMIN"));
+    }
+
+    @Test
+    public void shouldThrowUserNotFoundWhenAssignRoleToUserTest() {
+        exceptionRule.expect(UserNotFoundException.class);
+        exceptionRule.expectMessage("User not found");
+
+        userService.assignRoleToUser("ROLE_ADMIN", "username");
+    }
+
+    @Test
+    public void shouldThrowRoleNotFoundWhenAssignRoleToUserTest() {
+        exceptionRule.expect(RoleNotFoundException.class);
+        exceptionRule.expectMessage("Role not found");
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(new User()));
+
+        userService.assignRoleToUser("ROLE_TEST", "username");
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void shouldThrowUserNotFoundWhileDeleteUserTest() {
+        userService.deleteUser("username");
+
+        verify(userRepository).findByUsername("username");
+        verifyNoMoreInteractions(userRepository);
     }
 
     private Optional<User> initUser() {
