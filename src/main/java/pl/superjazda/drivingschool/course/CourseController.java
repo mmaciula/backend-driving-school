@@ -30,7 +30,7 @@ public class CourseController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addCourse(@Valid @RequestBody AddCourse addCourse) {
-        CourseDto courseToAdd = courseService.addNewCourse(addCourse);
+        courseService.addNewCourse(addCourse);
 
         return ResponseEntity.ok(new ResponseMessage("Course created successfully"));
     }
@@ -61,7 +61,7 @@ public class CourseController {
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
-        CourseDto course = courseService.delete(id);
+        courseService.delete(id);
 
         return ResponseEntity.ok(new ResponseMessage("Course deleted successfully"));
     }

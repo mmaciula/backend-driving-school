@@ -22,6 +22,9 @@ public class UserService {
     private UserRepository userRepository;
     private CourseRepository courseRepository;
     private RoleRepository roleRepository;
+    private static final String USER = "User not found";
+    private static final String COURSE = "Course not found";
+    private static final String ROLE = "Role not found";
 
     @Autowired
     public UserService(UserRepository userRepository, CourseRepository courseRepository, RoleRepository roleRepository) {
@@ -34,19 +37,17 @@ public class UserService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> userFromDatabase = userRepository.findByUsername(username);
         if (!userFromDatabase.isPresent()) {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException(USER);
         }
 
-        UserDto user = new UserDto(userFromDatabase.get());
-
-        return user;
+        return new UserDto(userFromDatabase.get());
     }
 
     public List<UserDto> findAllRegisteredUsers() {
         List<UserDto> users = new ArrayList<>();
 
         userRepository.findAll().forEach(user -> {
-            if (user.getUsername() != getCurrentUser().getUsername()) {
+            if (!user.getUsername().equals(getCurrentUser().getUsername())) {
                 users.add(new UserDto(user));
             }
         });
@@ -58,21 +59,22 @@ public class UserService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException(USER);
         }
 
         Optional<Course> course = courseRepository.findById(courseId);
         if (!course.isPresent()) {
-            throw new CourseNotFoundException("Course not found");
+            throw new CourseNotFoundException(COURSE);
         }
 
         Set<Course> userCourses = user.get().getCourses();
         userCourses.add(course.get());
         user.get().setCourses(userCourses);
 
+        // TODO Check if below is necessary
         Optional<Course> courseToUpdateParticipants = courseRepository.findById(courseId);
         if (!courseToUpdateParticipants.isPresent()) {
-            throw new CourseNotFoundException("Course not found");
+            throw new CourseNotFoundException(COURSE);
         }
         int participants = courseToUpdateParticipants.get().getMembers();
         participants = participants - 1;
@@ -87,13 +89,13 @@ public class UserService {
     public UserDto assignRoleToUser(String role, String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException(USER);
         }
 
         RoleType roleType = findRoleByName(role);
         Optional<Role> roleFromDatabase = roleRepository.findByName(roleType);
         if (!roleFromDatabase.isPresent()) {
-            throw new RoleNotFoundException("Role not found");
+            throw new RoleNotFoundException(ROLE);
         }
 
         Set<Role> userRoles = user.get().getRoles();
@@ -107,7 +109,7 @@ public class UserService {
     public UserDto deleteUser(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException(USER);
         }
         UserDto userDto = new UserDto(user.get());
         userRepository.delete(user.get());
@@ -120,7 +122,7 @@ public class UserService {
 
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException(USER);
         }
 
         return user.get();

@@ -1,6 +1,5 @@
 package pl.superjazda.drivingschool.user;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,10 @@ import pl.superjazda.drivingschool.role.Role;
 import pl.superjazda.drivingschool.role.RoleRepository;
 import pl.superjazda.drivingschool.role.RoleType;
 
-import java.util.Date;
 import java.util.Optional;
 
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -37,6 +37,14 @@ public class UserControllerTest {
     private CourseRepository courseRepository;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Test
+    @WithMockUser(username = "student")
+    public void shouldShowLoggedUserTest() throws Exception {
+        mockMvc.perform(get("/api/users/me"))
+                .andDo(print())
+                .andExpect(jsonPath("$.username").value("student"));
+    }
 
     @Test
     @WithMockUser(username = "administrator", roles = "ADMIN")
@@ -63,12 +71,21 @@ public class UserControllerTest {
     public void shouldAssignNewRoleToUser() throws Exception {
         String username = "student";
         String role = "ROLE_ADMIN";
-        Role adminRole = new Role(RoleType.ROLE_ADMIN);
-        roleRepository.save(adminRole);
 
         mockMvc.perform(post("/api/users/roles/assign/{role}/{username}", role, username))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.roles[0]").value(role));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void shouldDeleteUserFromDatabaseTest() throws Exception {
+        mockMvc.perform(delete("/api/users/delete/{username}", "delete"))
+                .andExpect(status().isOk());
+
+        Optional<User> user = userRepository.findByUsername("delete");
+
+        assertTrue(user.isEmpty());
     }
 }

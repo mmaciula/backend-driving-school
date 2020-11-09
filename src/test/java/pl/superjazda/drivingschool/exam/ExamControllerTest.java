@@ -83,4 +83,12 @@ public class ExamControllerTest {
         Optional<Exam> examFromDB = examRepository.findById(3000002L);
         assertTrue(examFromDB.get().getOccupied());
     }
+
+    @Test
+    @WithMockUser(roles = "MODERATOR")
+    public void shouldFindAllInstructorExamsTest() throws Exception {
+        mockMvc.perform(get("/api/exam/instructor"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }

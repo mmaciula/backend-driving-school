@@ -81,6 +81,14 @@ public class CourseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "instructor", roles = "MODERATOR")
+    public void shouldFindAllInstructorCoursesTest() throws Exception {
+        mockMvc.perform(get("/api/course/instructor"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldDeleteChosenCourseTest() throws Exception {
         Long courseId = 1000003L;
