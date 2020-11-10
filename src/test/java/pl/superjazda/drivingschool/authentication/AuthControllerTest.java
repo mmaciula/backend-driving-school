@@ -9,12 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.superjazda.drivingschool.jwt.Login;
-import pl.superjazda.drivingschool.jwt.Register;
-import pl.superjazda.drivingschool.user.User;
-import pl.superjazda.drivingschool.user.UserRepository;
-
-import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -50,6 +44,6 @@ public class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(credentials)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("student"));
+                .andExpect(jsonPath("$.username").value(credentials.getUsername()));
     }
 }

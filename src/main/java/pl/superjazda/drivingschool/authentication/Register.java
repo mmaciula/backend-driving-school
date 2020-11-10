@@ -1,4 +1,4 @@
-package pl.superjazda.drivingschool.jwt;
+package pl.superjazda.drivingschool.authentication;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package pl.superjazda.drivingschool.jwt;
+package pl.superjazda.drivingschool.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.superjazda.drivingschool.exception.RoleNotFoundException;
 import pl.superjazda.drivingschool.helpers.ResponseMessage;
+import pl.superjazda.drivingschool.jwt.JwtTokenUtil;
+import pl.superjazda.drivingschool.jwt.JwtUserDetails;
+import pl.superjazda.drivingschool.jwt.TokenDto;
 import pl.superjazda.drivingschool.role.Role;
 import pl.superjazda.drivingschool.role.RoleType;
 import pl.superjazda.drivingschool.user.User;
