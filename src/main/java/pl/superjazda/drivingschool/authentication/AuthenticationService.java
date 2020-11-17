@@ -32,6 +32,7 @@ public class AuthenticationService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private JwtTokenUtil tokenUtil;
+    private static final String ROLE = "Role not found";
 
     @Autowired
     public AuthenticationService(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository,
@@ -80,26 +81,26 @@ public class AuthenticationService {
 
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                    .orElseThrow(() -> new RoleNotFoundException("Role not found."));
+                    .orElseThrow(() -> new RoleNotFoundException(ROLE));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
                         Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
-                                .orElseThrow(() -> new RoleNotFoundException("Role not found."));
+                                .orElseThrow(() -> new RoleNotFoundException(ROLE));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
                         Role modRole = roleRepository.findByName(RoleType.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RoleNotFoundException("Role not found."));
+                                .orElseThrow(() -> new RoleNotFoundException(ROLE));
                         roles.add(modRole);
 
                         break;
                     default:
                         Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                                .orElseThrow(() -> new RoleNotFoundException("Role not found."));
+                                .orElseThrow(() -> new RoleNotFoundException(ROLE));
                         roles.add(userRole);
                 }
             });
