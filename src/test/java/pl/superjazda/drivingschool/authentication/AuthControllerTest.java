@@ -10,6 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,6 +34,22 @@ public class AuthControllerTest {
         mockMvc.perform(post("/api/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(register)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value("User registered successfully!"));
+    }
+
+    @Test
+    public void shouldRegisterUserWhoHasRolesTest() throws Exception {
+        Register newUserDetails = new Register("UserWithRoles", "aserwithroles@domain.com", "UserWithRoles123", "John", "Doe");
+        Set<String> roles = new HashSet<>();
+        roles.add("mod");
+        roles.add("user");
+        newUserDetails.setRoles(roles);
+
+        mockMvc.perform(post("/api/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newUserDetails)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("User registered successfully!"));

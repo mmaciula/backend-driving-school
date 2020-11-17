@@ -13,21 +13,13 @@ import pl.superjazda.drivingschool.exception.EmailAlreadyExistsException;
 import pl.superjazda.drivingschool.exception.RoleNotFoundException;
 import pl.superjazda.drivingschool.exception.UserAlreadyExistsException;
 import pl.superjazda.drivingschool.jwt.JwtTokenUtil;
-import pl.superjazda.drivingschool.role.Role;
 import pl.superjazda.drivingschool.role.RoleRepository;
-import pl.superjazda.drivingschool.role.RoleType;
-import pl.superjazda.drivingschool.user.User;
-import pl.superjazda.drivingschool.user.UserDto;
 import pl.superjazda.drivingschool.user.UserRepository;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -81,8 +73,6 @@ public class AuthServiceTest {
         when(roleRepository.findByName(any())).thenReturn(Optional.empty());
 
         authService.registerUser(initRegisterData());
-
-        verify(userRepository, times(2));
     }
 
     private Register initRegisterData() {
