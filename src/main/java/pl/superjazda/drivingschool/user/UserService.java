@@ -131,14 +131,14 @@ public class UserService {
     private RoleType findRoleByName(String name) {
         RoleType roleType = null;
         switch (name) {
-            case "ROLE_USER":
-                roleType = RoleType.ROLE_USER;
-                break;
             case "ROLE_ADMIN":
                 roleType = RoleType.ROLE_ADMIN;
                 break;
             case "ROLE_MODERATOR":
                 roleType = RoleType.ROLE_MODERATOR;
+                break;
+            default:
+                roleType = RoleType.ROLE_USER;
                 break;
         }
         return roleType;

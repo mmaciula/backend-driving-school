@@ -29,7 +29,7 @@ public class ExamController {
     @PostMapping("/add/{courseId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ResponseMessage> addExam(@PathVariable Long courseId, @RequestBody AddExam addExam) {
-        ExamDto examDto = examService.addExam(courseId, addExam);
+        examService.addExam(courseId, addExam);
 
         return ResponseEntity.ok(new ResponseMessage("Exam created successfully!"));
     }

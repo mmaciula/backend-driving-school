@@ -28,7 +28,7 @@ public class PracticalController {
     @PostMapping("/add/{courseId}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<ResponseMessage> createPractical(@RequestBody AddPractical addPractical, @PathVariable Long courseId) {
-        PracticalDto practicalDto = practicalService.createNewPractical(addPractical, courseId);
+        practicalService.createNewPractical(addPractical, courseId);
 
         return ResponseEntity.ok(new ResponseMessage("Practical created successfully!"));
     }

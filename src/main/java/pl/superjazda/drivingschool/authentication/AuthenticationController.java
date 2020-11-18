@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.superjazda.drivingschool.helpers.ResponseMessage;
 import pl.superjazda.drivingschool.jwt.TokenDto;
-import pl.superjazda.drivingschool.user.UserDto;
 
 import javax.validation.Valid;
 
@@ -33,7 +32,7 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<ResponseMessage> registerUser(@Valid @RequestBody Register register) {
-        UserDto registeredUser = authService.registerUser(register);
+        authService.registerUser(register);
 
         return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
     }
