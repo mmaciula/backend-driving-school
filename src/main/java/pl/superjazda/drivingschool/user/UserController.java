@@ -35,7 +35,7 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> findAllUsers() {
+    public ResponseEntity<List<UserDto>> findAllUsers() {
         List<UserDto> users = userService.findAllRegisteredUsers();
 
         return ResponseEntity.ok(users);
@@ -43,7 +43,7 @@ public class UserController {
 
     @PutMapping("/course/add/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<?> assignCourseToUser(@PathVariable Long id) {
+    public ResponseEntity<UserDto> assignCourseToUser(@PathVariable Long id) {
         UserDto user = userService.assignUserToCourse(id);
 
         return ResponseEntity.ok(user);
@@ -51,7 +51,7 @@ public class UserController {
 
     @PostMapping("/roles/assign/{role}/{username}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> assignRoleToUser(@PathVariable String role, @PathVariable String username) {
+    public ResponseEntity<UserDto> assignRoleToUser(@PathVariable String role, @PathVariable String username) {
         UserDto user = userService.assignRoleToUser(role, username);
 
         return ResponseEntity.ok(user);
@@ -59,8 +59,8 @@ public class UserController {
 
     @DeleteMapping("/delete/{username}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteUser(@PathVariable String username) {
-        UserDto user = userService.deleteUser(username);
+    public ResponseEntity<ResponseMessage> deleteUser(@PathVariable String username) {
+        userService.deleteUser(username);
 
         return ResponseEntity.ok(new ResponseMessage("User: " + username + " deleted successfully"));
     }

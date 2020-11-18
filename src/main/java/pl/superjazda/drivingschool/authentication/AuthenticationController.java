@@ -25,14 +25,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody Login logIn) {
+    public ResponseEntity<TokenDto> authenticateUser(@Valid @RequestBody Login logIn) {
         TokenDto authenticatedUser = authService.logInUser(logIn);
 
         return ResponseEntity.ok(authenticatedUser);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody Register register) {
+    public ResponseEntity<ResponseMessage> registerUser(@Valid @RequestBody Register register) {
         UserDto registeredUser = authService.registerUser(register);
 
         return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));

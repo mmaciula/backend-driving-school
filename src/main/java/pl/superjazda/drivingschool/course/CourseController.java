@@ -1,6 +1,7 @@
 package pl.superjazda.drivingschool.course;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,14 +30,14 @@ public class CourseController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> addCourse(@Valid @RequestBody AddCourse addCourse) {
+    public ResponseEntity<ResponseMessage> addCourse(@Valid @RequestBody AddCourse addCourse) {
         courseService.addNewCourse(addCourse);
 
         return ResponseEntity.ok(new ResponseMessage("Course created successfully"));
     }
 
     @GetMapping("/courses")
-    public ResponseEntity<?> getAllAvailableCoursesList() {
+    public ResponseEntity<List<CourseDto>> getAllAvailableCoursesList() {
         List<CourseDto> courses = courseService.getListOfAllAvailableCourses();
 
         return ResponseEntity.ok(courses);
@@ -44,7 +45,7 @@ public class CourseController {
 
     @GetMapping("/courses/{courseId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<?> findCourseById(@PathVariable Long courseId) {
+    public ResponseEntity<CourseDto> findCourseById(@PathVariable Long courseId) {
         CourseDto course = courseService.findCourseById(courseId);
 
         return ResponseEntity.ok(course);
@@ -52,7 +53,7 @@ public class CourseController {
 
     @GetMapping("/instructor")
     @PreAuthorize("hasRole('MODERATOR')")
-    public ResponseEntity<?> findAllInstructorCourses() {
+    public ResponseEntity<List<CourseDto>> findAllInstructorCourses() {
         List<CourseDto> courses = courseService.findAllInstructorCourses();
 
         return ResponseEntity.ok(courses);
@@ -60,7 +61,7 @@ public class CourseController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
+    public ResponseEntity<ResponseMessage> deleteCourse(@PathVariable Long id) {
         courseService.delete(id);
 
         return ResponseEntity.ok(new ResponseMessage("Course deleted successfully"));

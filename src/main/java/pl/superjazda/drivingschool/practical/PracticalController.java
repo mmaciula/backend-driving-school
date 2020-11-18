@@ -27,7 +27,7 @@ public class PracticalController {
 
     @PostMapping("/add/{courseId}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<?> createPractical(@RequestBody AddPractical addPractical, @PathVariable Long courseId) {
+    public ResponseEntity<ResponseMessage> createPractical(@RequestBody AddPractical addPractical, @PathVariable Long courseId) {
         PracticalDto practicalDto = practicalService.createNewPractical(addPractical, courseId);
 
         return ResponseEntity.ok(new ResponseMessage("Practical created successfully!"));
@@ -35,7 +35,7 @@ public class PracticalController {
 
     @PostMapping("/course/{practicalId}/signup")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> signUserForPractical(@PathVariable Long practicalId) {
+    public ResponseEntity<PracticalDto> signUserForPractical(@PathVariable Long practicalId) {
         PracticalDto practicalDto = practicalService.signUserForPractical(practicalId);
 
         return ResponseEntity.ok(practicalDto);
@@ -43,7 +43,7 @@ public class PracticalController {
 
     @GetMapping("/occupied")
     @PreAuthorize("hasRole('MODERATOR')")
-    public ResponseEntity<?> findAllCoursePracticalWithSignInUser() {
+    public ResponseEntity<List<PracticalDto>> findAllCoursePracticalWithSignInUser() {
         List<PracticalDto> practicals = practicalService.findAllBookedPracticals();
 
         return ResponseEntity.ok(practicals);
@@ -51,7 +51,7 @@ public class PracticalController {
 
     @GetMapping("/course/{courseId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MODERATOR')")
-    public ResponseEntity<?> findAllPracticalForCourse(@PathVariable Long courseId) {
+    public ResponseEntity<List<PracticalDto>> findAllPracticalForCourse(@PathVariable Long courseId) {
         List<PracticalDto> coursePracticals = practicalService.findAllCoursePracticals(courseId);
 
         return ResponseEntity.ok(coursePracticals);
@@ -59,7 +59,7 @@ public class PracticalController {
 
     @GetMapping("/mine")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> findAllStudentsPracticals() {
+    public ResponseEntity<List<PracticalDto>> findAllStudentsPracticals() {
         List<PracticalDto> studentPracticals = practicalService.findAllLoggedInUserPracticals();
 
         return ResponseEntity.ok(studentPracticals);
@@ -67,7 +67,7 @@ public class PracticalController {
 
     @PostMapping("/{id}/rate/{rate}")
     @PreAuthorize("hasRole('MODERATOR')")
-    public ResponseEntity<?> addRate(@PathVariable Long id, @PathVariable int rate) {
+    public ResponseEntity<PracticalDto> addRate(@PathVariable Long id, @PathVariable int rate) {
         PracticalDto practical = practicalService.ratePractical(id, rate);
 
         return ResponseEntity.ok(practical);
@@ -75,7 +75,7 @@ public class PracticalController {
 
     @PostMapping("/{id}/comment")
     @PreAuthorize("hasRole('MODERATOR')")
-    public ResponseEntity<?> addComment(@PathVariable Long id, @RequestBody String comment) {
+    public ResponseEntity<PracticalDto> addComment(@PathVariable Long id, @RequestBody String comment) {
         PracticalDto practical = practicalService.commentPractical(id, comment);
 
         return ResponseEntity.ok(practical);

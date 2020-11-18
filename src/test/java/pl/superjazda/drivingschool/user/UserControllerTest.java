@@ -10,9 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.superjazda.drivingschool.course.Course;
 import pl.superjazda.drivingschool.course.CourseRepository;
-import pl.superjazda.drivingschool.role.Role;
 import pl.superjazda.drivingschool.role.RoleRepository;
-import pl.superjazda.drivingschool.role.RoleType;
 
 import java.util.Optional;
 

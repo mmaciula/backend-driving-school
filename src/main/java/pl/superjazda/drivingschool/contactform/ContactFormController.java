@@ -1,6 +1,7 @@
 package pl.superjazda.drivingschool.contactform;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class ContactFormController {
     }
 
     @PostMapping
-    public ResponseEntity<?> sendMessage(@RequestBody ContactDto message) {
+    public ResponseEntity<ResponseMessage> sendMessage(@RequestBody ContactDto message) {
         emailService.contactForm(message);
         return ResponseEntity.ok(new ResponseMessage("Message sent"));
     }

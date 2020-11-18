@@ -28,7 +28,7 @@ public class ExamController {
 
     @PostMapping("/add/{courseId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<?> addExam(@PathVariable Long courseId, @RequestBody AddExam addExam) {
+    public ResponseEntity<ResponseMessage> addExam(@PathVariable Long courseId, @RequestBody AddExam addExam) {
         ExamDto examDto = examService.addExam(courseId, addExam);
 
         return ResponseEntity.ok(new ResponseMessage("Exam created successfully!"));
@@ -36,7 +36,7 @@ public class ExamController {
 
     @GetMapping("/list")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<List<ExamDto>> findAll() {
         List<ExamDto> exams = examService.findAllExams();
 
         return ResponseEntity.ok(exams);
@@ -44,7 +44,7 @@ public class ExamController {
 
     @GetMapping("/course/{courseId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public ResponseEntity<?> findAllExamsByCourseId(@PathVariable Long courseId) {
+    public ResponseEntity<List<ExamDto>> findAllExamsByCourseId(@PathVariable Long courseId) {
         List<ExamDto> exams = examService.findAllCourseExamsById(courseId);
 
         return ResponseEntity.ok(exams);
@@ -52,7 +52,7 @@ public class ExamController {
 
     @GetMapping("/student")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> findAllByStudentUsername() {
+    public ResponseEntity<List<ExamDto>> findAllByStudentUsername() {
         List<ExamDto> studentExams = examService.findAllStudentExams();
 
         return ResponseEntity.ok(studentExams);
@@ -60,7 +60,7 @@ public class ExamController {
 
     @GetMapping("/instructor")
     @PreAuthorize("hasRole('MODERATOR')")
-    public ResponseEntity<?> findAllByInstructorUsername() {
+    public ResponseEntity<List<ExamDto>> findAllByInstructorUsername() {
         List<ExamDto> instructorExams = examService.findAllInstructorExams();
 
         return ResponseEntity.ok(instructorExams);
@@ -68,7 +68,7 @@ public class ExamController {
 
     @PutMapping("/signin/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> signInForExam(@PathVariable Long id) {
+    public ResponseEntity<ExamDto> signInForExam(@PathVariable Long id) {
         ExamDto exam = examService.signInForExam(id);
 
         return ResponseEntity.ok(exam);
