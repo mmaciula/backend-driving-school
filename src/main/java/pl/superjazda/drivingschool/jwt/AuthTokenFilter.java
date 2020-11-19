@@ -19,7 +19,7 @@ import java.io.IOException;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private JwtUserDetailsService jwtUserDetailsService;
     private JwtTokenUtil jwtTokenUtil;
 
@@ -47,7 +47,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Can't authenticate user", e);
+            log.error("Can't authenticate user", e);
         }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);

@@ -68,9 +68,7 @@ public class PracticalService {
         List<Practical> activities = practicalRepository.findAllByInstructorUsernameAndStudentNotNull(instructorUsername);
         List<PracticalDto> dtos = new ArrayList<>();
 
-        activities.forEach(practical -> {
-            dtos.add(new PracticalDto(practical));
-        });
+        activities.forEach(practical -> dtos.add(new PracticalDto(practical)));
 
         return dtos;
     }
@@ -79,9 +77,7 @@ public class PracticalService {
         List<Practical> activities = practicalRepository.findAllByCourseId(courseId);
         List<PracticalDto> dtos = new ArrayList<>();
 
-        activities.forEach(practical -> {
-            dtos.add(new PracticalDto(practical));
-        });
+        activities.forEach(practical -> dtos.add(new PracticalDto(practical)));
 
         return dtos;
     }
@@ -91,9 +87,7 @@ public class PracticalService {
         List<Practical> activities = practicalRepository.findAllByStudentUsername(username);
         List<PracticalDto> dtos = new ArrayList<>();
 
-        activities.forEach(practical -> {
-            dtos.add(new PracticalDto(practical));
-        });
+        activities.forEach(practical -> dtos.add(new PracticalDto(practical)));
 
         return dtos;
     }

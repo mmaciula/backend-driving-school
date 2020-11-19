@@ -75,9 +75,7 @@ public class CourseService {
         }
 
         List<CourseDto> dtos = new ArrayList<>();
-        instructorCourses.forEach(course -> {
-            dtos.add(new CourseDto(course));
-        });
+        instructorCourses.forEach(course -> dtos.add(new CourseDto(course)));
 
         return dtos;
     }

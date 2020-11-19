@@ -52,9 +52,7 @@ public class ExamService {
         List<Exam> exams = examRepository.findAll();
         List<ExamDto> dtos = new ArrayList<>();
 
-        exams.forEach(exam -> {
-            dtos.add(new ExamDto(exam));
-        });
+        exams.forEach(exam -> dtos.add(new ExamDto(exam)));
 
         return dtos;
     }
@@ -63,9 +61,7 @@ public class ExamService {
         List<Exam> exams = examRepository.findAllByCourseId(id);
         List<ExamDto> dtos = new ArrayList<>();
 
-        exams.forEach(exam -> {
-            dtos.add(new ExamDto(exam));
-        });
+        exams.forEach(exam -> dtos.add(new ExamDto(exam)));
 
         return dtos;
     }
@@ -76,9 +72,7 @@ public class ExamService {
         List<Exam> exams = examRepository.findAllByStudentUsername(username);
         List<ExamDto> dtos = new ArrayList<>();
 
-        exams.forEach(exam -> {
-            dtos.add(new ExamDto(exam));
-        });
+        exams.forEach(exam -> dtos.add(new ExamDto(exam)));
 
         return dtos;
     }
@@ -87,11 +81,9 @@ public class ExamService {
         String instructorUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
         List<Exam> exams = examRepository.findAllByInstructorUsernameOrderByExamDate(instructorUsername);
-        List<ExamDto> dtos = new ArrayList<>();
+        List<ExamDto> dtos = new ArrayList();
 
-        exams.forEach(exam -> {
-            dtos.add(new ExamDto(exam));
-        });
+        exams.forEach(exam -> dtos.add(new ExamDto(exam)));
 
         return dtos;
     }

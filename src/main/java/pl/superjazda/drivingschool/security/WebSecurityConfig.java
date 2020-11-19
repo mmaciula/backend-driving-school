@@ -13,9 +13,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.superjazda.drivingschool.jwt.AuthTokenFilter;
 import pl.superjazda.drivingschool.jwt.JwtAuthenticationEntryPoint;
 import pl.superjazda.drivingschool.jwt.JwtUserDetailsService;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtUserDetailsService jwtUserDetailsService;
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final String ANGULAR_API = "http://localhost:4200";
 
     @Bean
     public PasswordEncoder passwordEncoderBean() {
@@ -40,6 +46,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthTokenFilter authTokenFilterBean() {
         return new AuthTokenFilter();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList(ANGULAR_API));
+        corsConfiguration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "UPDATE", "DELETE", "PATCH"));
+
+        source.registerCorsConfiguration("/**", corsConfiguration);
+
+        return source;
     }
 
     @Autowired
