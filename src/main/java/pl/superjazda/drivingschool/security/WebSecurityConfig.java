@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtUserDetailsService jwtUserDetailsService;
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final String ANGULAR_API = "http://localhost:4200";
+    private static final String CLIENT = "http://localhost:4200";
 
     @Bean
     public PasswordEncoder passwordEncoderBean() {
@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
-        corsConfiguration.setAllowedOrigins(Arrays.asList(ANGULAR_API));
+        corsConfiguration.setAllowedOrigins(Arrays.asList(CLIENT));
         corsConfiguration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "UPDATE", "DELETE", "PATCH"));
 
         source.registerCorsConfiguration("/**", corsConfiguration);

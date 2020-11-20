@@ -9,5 +9,5 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     boolean existsByName(String name);
     List<Course> findAllByInstructorUsername(String username);
-    Course findByName(String name); //TODO Doesn't return unique value
+    Course findByName(String name);
 }
