@@ -31,6 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private static final String CLIENT = "http://localhost:4200";
+    private static final String USER = "USER";
+    private static final String ADMIN = "ADMIN";
+    private static final String MOD = "MODERATOR";
 
     @Bean
     public PasswordEncoder passwordEncoderBean() {
@@ -75,10 +78,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/course/**").permitAll()
-                .antMatchers("/api/users/**").permitAll()
-                .antMatchers("/api/activity/**").permitAll()
-                .antMatchers("/api/exam/**").permitAll()
+                .antMatchers("/api/course/**").hasAnyRole(USER, ADMIN, MOD)
+                .antMatchers("/api/users/**").hasAnyRole(USER, ADMIN)
+                .antMatchers("/api/activity/**").hasAnyRole(USER, ADMIN, MOD)
+                .antMatchers("/api/exam/**").hasAnyRole(USER, ADMIN, MOD)
                 .antMatchers("/api/contact/**").permitAll()
                 .anyRequest().authenticated();
 
