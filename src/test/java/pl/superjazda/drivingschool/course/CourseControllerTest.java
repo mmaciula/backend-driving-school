@@ -54,7 +54,6 @@ public class CourseControllerTest {
     @Test
     @WithMockUser
     public void shouldGetListOfAllAvailableCoursesForCurrentlyLoggedUserTest() throws Exception {
-        // TODO Look at TODO inside ExamControllerTest class
         mockMvc.perform(get("/api/course/courses"))
                 .andDo(print())
                 .andExpect(status().isOk());

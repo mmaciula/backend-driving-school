@@ -47,7 +47,6 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "administrator", roles = "ADMIN")
     public void shouldFindAllRegisteredUsersTest() throws Exception {
-        // TODO Check return array
         mockMvc.perform(get("/api/users"))
                 .andDo(print())
                 .andExpect(status().isOk());

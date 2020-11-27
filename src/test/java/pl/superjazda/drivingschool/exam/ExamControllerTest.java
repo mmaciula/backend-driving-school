@@ -39,7 +39,6 @@ public class ExamControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void shouldFindAllExamsTest() throws Exception {
-        // TODO Research for a ways to check returned list
         mockMvc.perform(get("/api/exam/list"))
                 .andDo(print())
                 .andExpect(status().isOk());

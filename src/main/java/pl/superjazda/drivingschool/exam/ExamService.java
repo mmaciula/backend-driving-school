@@ -9,6 +9,7 @@ import pl.superjazda.drivingschool.exception.CourseNotFoundException;
 import pl.superjazda.drivingschool.exception.ExamNotFoundException;
 import pl.superjazda.drivingschool.exception.UserNotFoundException;
 import pl.superjazda.drivingschool.user.User;
+import pl.superjazda.drivingschool.user.UserDto;
 import pl.superjazda.drivingschool.user.UserRepository;
 
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ public class ExamService {
     }
 
     public ExamDto addExam(Long id, AddExam addExam) {
-        // TODO When exam is created by Administrator - no need to add user
         // TODO Create integration test for this method
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
@@ -42,7 +42,7 @@ public class ExamService {
             throw new CourseNotFoundException("Course not found");
         }
 
-        Exam newExam = new Exam(addExam.getDate(), user.get(), course.get());
+        Exam newExam = createNewExam(addExam, user.get(), course.get());
         examRepository.save(newExam);
 
         return new ExamDto(newExam);
@@ -104,5 +104,17 @@ public class ExamService {
         examRepository.save(exam.get());
 
         return new ExamDto(exam.get());
+    }
+
+    private Exam createNewExam(AddExam addExam, User user, Course course) {
+        UserDto userDto = new UserDto(user);
+
+        if (userDto.getRoles().contains("MODERATOR")) {
+            return new Exam(addExam.getDate(), course, user);
+        } else if (userDto.getRoles().contains("ADMIN")) {
+            return new Exam(addExam.getDate(), course, course.getInstructor());
+        } else {
+            return new Exam(addExam.getDate(), user, course);
+        }
     }
 }
