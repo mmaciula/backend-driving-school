@@ -12,10 +12,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import pl.superjazda.drivingschool.course.CourseRepository;
 import pl.superjazda.drivingschool.user.UserRepository;
 
+import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,5 +90,20 @@ public class ExamControllerTest {
         mockMvc.perform(get("/api/exam/instructor"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "student")
+    public void shouldAddNewExamTest() throws Exception {
+        AddExam examToAdd = new AddExam(new Date());
+        Long courseId = 1000002L;
+
+        mockMvc.perform(post("/api/exam/add/{courseId}", courseId)
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(examToAdd)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        assertTrue(examRepository.findAllByCourseId(courseId).size() > 0);
     }
 }
