@@ -30,7 +30,6 @@ public class ExamService {
     }
 
     public ExamDto addExam(Long id, AddExam addExam) {
-        // TODO Create integration test for this method
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
