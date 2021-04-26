@@ -1,10 +1,16 @@
 package pl.superjazda.drivingschool.practical;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import pl.superjazda.drivingschool.course.CourseDto;
 import pl.superjazda.drivingschool.user.UserDto;
 
 import java.util.Date;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public class PracticalDto {
     private Long id;
     private Date date;
@@ -13,16 +19,6 @@ public class PracticalDto {
     private CourseDto course;
     private UserDto instructor;
     private UserDto student;
-
-    public PracticalDto(Long id, Date date, int instructorRate, String comment, CourseDto course, UserDto instructor, UserDto student) {
-        this.id = id;
-        this.date = date;
-        this.instructorRate = instructorRate;
-        this.comment = comment;
-        this.course = course;
-        this.instructor = instructor;
-        this.student = student;
-    }
 
     public PracticalDto(Practical practical) {
         this.id = practical.getId();
@@ -36,61 +32,5 @@ public class PracticalDto {
         } else {
             this.student = new UserDto(practical.getStudent());
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public int getInstructorRate() {
-        return instructorRate;
-    }
-
-    public void setInstructorRate(int instructorRate) {
-        this.instructorRate = instructorRate;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public CourseDto getCourse() {
-        return course;
-    }
-
-    public void setCourse(CourseDto course) {
-        this.course = course;
-    }
-
-    public UserDto getInstructor() {
-        return instructor;
-    }
-
-    public void setInstructor(UserDto instructor) {
-        this.instructor = instructor;
-    }
-
-    public UserDto getStudent() {
-        return student;
-    }
-
-    public void setStudent(UserDto student) {
-        this.student = student;
     }
 }

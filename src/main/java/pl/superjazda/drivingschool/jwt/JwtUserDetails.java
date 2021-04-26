@@ -39,7 +39,7 @@ public class JwtUserDetails implements UserDetails {
 
     public static JwtUserDetails build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleType().name()))
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
         return new JwtUserDetails(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getName(), user.getSurname(), authorities);

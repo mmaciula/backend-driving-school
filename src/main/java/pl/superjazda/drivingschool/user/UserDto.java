@@ -1,10 +1,16 @@
 package pl.superjazda.drivingschool.user;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.superjazda.drivingschool.course.CourseDto;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserDto {
     private String username;
     private String email;
@@ -13,8 +19,6 @@ public class UserDto {
     private Set<String> roles;
     private Set<CourseDto> courses;
 
-    public UserDto() { }
-
     public UserDto(User user) {
         this.username = user.getUsername();
         this.email = user.getEmail();
@@ -22,7 +26,7 @@ public class UserDto {
         this.surname = user.getSurname();
         Set<String> userRoles = new HashSet<>();
         user.getRoles().forEach(role -> {
-            userRoles.add(role.getRoleType().name());
+            userRoles.add(role.getName().name());
         });
         this.roles = userRoles;
         Set<CourseDto> userCourses = new HashSet<>();
@@ -30,53 +34,5 @@ public class UserDto {
             userCourses.add(new CourseDto(course));
         });
         this.courses = userCourses;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
-
-    public Set<CourseDto> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<CourseDto> courses) {
-        this.courses = courses;
     }
 }

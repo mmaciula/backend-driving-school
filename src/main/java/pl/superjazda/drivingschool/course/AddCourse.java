@@ -1,9 +1,17 @@
 package pl.superjazda.drivingschool.course;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddCourse {
     private String name;
     private String description;
@@ -12,63 +20,4 @@ public class AddCourse {
     private Date startDate;
     private String instructorUsername;
     private int members;
-
-    public AddCourse() { }
-
-    public AddCourse(String name, String description, float cost, Date startDate, String instructorUsername, int members) {
-        this.name = name;
-        this.description = description;
-        this.cost = cost;
-        this.startDate = startDate;
-        this.instructorUsername = instructorUsername;
-        this.members = members;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public float getCost() {
-        return cost;
-    }
-
-    public void setCost(float cost) {
-        this.cost = cost;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getInstructorUsername() {
-        return instructorUsername;
-    }
-
-    public void setInstructorUsername(String instructorUsername) {
-        this.instructorUsername = instructorUsername;
-    }
-
-    public int getMembers() {
-        return members;
-    }
-
-    public void setMembers(int members) {
-        this.members = members;
-    }
 }

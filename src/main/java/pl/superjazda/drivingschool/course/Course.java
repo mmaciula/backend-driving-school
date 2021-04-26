@@ -1,5 +1,8 @@
 package pl.superjazda.drivingschool.course;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.superjazda.drivingschool.user.User;
 
 import javax.persistence.Entity;
@@ -18,6 +21,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "courses")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_generator")
@@ -37,8 +43,6 @@ public class Course {
     private User instructor;
     private int members;
 
-    public Course() { }
-
     public Course(AddCourse course, User instructor) {
        this.name = course.getName();
        this.description = course.getDescription();
@@ -54,62 +58,6 @@ public class Course {
         this.cost = cost;
         this.instructor = instructor;
         this.startDate = startDate;
-        this.members = members;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public float getCost() {
-        return cost;
-    }
-
-    public void setCost(float cost) {
-        this.cost = cost;
-    }
-
-    public User getInstructor() {
-        return instructor;
-    }
-
-    public void setInstructor(User instructor) {
-        this.instructor = instructor;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public int getMembers() {
-        return members;
-    }
-
-    public void setMembers(int members) {
         this.members = members;
     }
 }

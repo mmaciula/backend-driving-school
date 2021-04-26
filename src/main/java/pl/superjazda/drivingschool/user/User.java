@@ -1,5 +1,8 @@
 package pl.superjazda.drivingschool.user;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.superjazda.drivingschool.course.Course;
 import pl.superjazda.drivingschool.practical.Practical;
 import pl.superjazda.drivingschool.role.Role;
@@ -24,6 +27,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_gen")
@@ -54,93 +60,11 @@ public class User {
     @OneToMany(mappedBy = "student")
     private Set<Practical> practicals;
 
-    public User () { }
-
     public User(String username, String email, String password, String name, String surname) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
-
-    public Set<Course> getInstructedCourses() {
-        return instructedCourses;
-    }
-
-    public void setInstructedCourses(Set<Course> instructedCourses) {
-        this.instructedCourses = instructedCourses;
-    }
-
-    public Set<Practical> getPracticals() {
-        return practicals;
-    }
-
-    public void setPracticals(Set<Practical> practicals) {
-        this.practicals = practicals;
     }
 }
