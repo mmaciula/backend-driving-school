@@ -11,7 +11,7 @@ pipeline {
                 sh "mvn clean compile"
             }
         }
-        stage('Build') {
+        stage('Test') {
             steps {
                 sh "mvn test JASYPT_SECRET"
             }
