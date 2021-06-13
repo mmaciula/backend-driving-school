@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "mvn test JASYPT_SECRET"
+                sh "mvn test ${JASYPT_SECRET}"
             }
         }
     }
