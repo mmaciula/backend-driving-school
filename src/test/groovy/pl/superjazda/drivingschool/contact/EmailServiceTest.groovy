@@ -2,8 +2,8 @@ package pl.superjazda.drivingschool.contact
 
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.test.util.ReflectionTestUtils
-import pl.superjazda.drivingschool.contactform.ContactDto
-import pl.superjazda.drivingschool.contactform.EmailService
+import pl.superjazda.drivingschool.api.contactform.ContactDto
+import pl.superjazda.drivingschool.api.contactform.EmailService
 import spock.lang.Specification
 
 class EmailServiceTest extends Specification {
